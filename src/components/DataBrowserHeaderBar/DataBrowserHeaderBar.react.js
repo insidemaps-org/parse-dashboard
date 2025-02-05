@@ -35,7 +35,7 @@ export default class DataBrowserHeaderBar extends React.Component {
       </div>,
     ];
 
-    headers.forEach(({ width, name, type, targetClass, order, visible, preventSort }, i) => {
+    headers.forEach(({ width, name, type, targetClass, order, visible, _preventSort }, i) => {
       if (!visible) {
         return;
       }
@@ -46,20 +46,31 @@ export default class DataBrowserHeaderBar extends React.Component {
         wrapStyle.background = '#66637A';
       }
       let onClick = null;
-      if (
-        !preventSort &&
-        (type === 'String' || type === 'Number' || type === 'Date' || type === 'Boolean')
-      ) {
+      // do not allow sort of any kind...
+      // sort requires indexes to be properly set
+      // should be refactored to whitelist instead of blacklist
+      // if (
+      //   !preventSort &&
+      //   (type === 'String' || type === 'Number' || type === 'Date' || type === 'Boolean')
+      // ) {
+      //   onClick = () =>{
+      //     updateOrdering((order === 'descending' ? '' : '-') + name);
+      //     setSelectedObjectId(null);
+      //     setCurrent(null)
+      //   }
+      // }
+
+      let className = styles.wrap;
+      // only createdAt is allowed to be sorted for now
+      if (name !== 'createdAt') {
+        className += ` ${styles.preventSort} `;
+      }
+      else {
         onClick = () =>{
           updateOrdering((order === 'descending' ? '' : '-') + name);
           setSelectedObjectId(null);
           setCurrent(null)
         }
-      }
-
-      let className = styles.wrap;
-      if (preventSort) {
-        className += ` ${styles.preventSort} `;
       }
 
       elements.push(
