@@ -61,9 +61,17 @@ export default class DataBrowserHeaderBar extends React.Component {
       // }
 
       let className = styles.wrap;
-      // if (preventSort) {
+      // only createdAt is allowed to be sorted for now
+      if (name !== 'createdAt') {
         className += ` ${styles.preventSort} `;
-      // }
+      }
+      else {
+        onClick = () =>{
+          updateOrdering((order === 'descending' ? '' : '-') + name);
+          setSelectedObjectId(null);
+          setCurrent(null)
+        }
+      }
 
       elements.push(
         <div onClick={onClick} key={'header' + i} className={className} style={wrapStyle}>
